@@ -1,0 +1,11 @@
+{
+  "name": "DevPleno_Firestore",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:RenatoSiqueira/DevPleno_Firestore.git",
+  "author": "renatosiqueira <renatoelysiqueira@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "firebase-admin": "^9.4.2"
+  }
+}

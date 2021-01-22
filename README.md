@@ -1,0 +1,1 @@
+# DevPleno - Acesso Firestore
