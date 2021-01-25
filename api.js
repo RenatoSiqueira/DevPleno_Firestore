@@ -23,12 +23,18 @@ const testes = async () => {
   //     categories: ["LQUPytG80KDNaJictzjf"],
   //   });
   //   await products.remove("hJXfH8OFPygMXAxCFkeN");
-  await products.addImage("OgL8GdX2rEtTGCgQNnqK", {
-    description: "Text",
-    url: "new",
-  });
+  // await products.addImage("OgL8GdX2rEtTGCgQNnqK", {
+  //   description: "Text",
+  //   url: "new",
+  // });
 
-  const prods = await products.findAll();
-  console.log(prods);
+  // const prods = await products.findAll();
+  // console.log(prods);
+
+  const prods2 = await products.findAllPaginated({
+    pageSize: 1,
+    startAfter: "",
+  });
+  console.log(prods2);
 };
 testes();

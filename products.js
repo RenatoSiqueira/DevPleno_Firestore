@@ -13,6 +13,7 @@ const findAll = async () => {
       id: doc.id,
     });
   });
+  const products2 = [];
   for await (product of products) {
     const imgs = [];
     const imgsDb = await db
@@ -24,9 +25,9 @@ const findAll = async () => {
     imgsDb.forEach((img) => {
       imgs.push({ ...img.data, id: img.id });
     });
-    console.log(imgs);
+    products2.push({ ...product, imgs });
   }
-  return products;
+  return products2;
 };
 
 const remove = async (id) => {
@@ -83,37 +84,52 @@ const update = async (id, { categories, ...data }) => {
 };
 
 const findAllPaginated = async ({ pageSize = 10, startAfter = "" }) => {
-  const categoriesDB = await db
-    .collection("categories")
-    .orderBy("category")
+  const productsDB = await db
+    .collection("products")
+    .orderBy("product")
     .startAfter(startAfter)
     .limit(pageSize + 1)
     .get();
 
-  if (categoriesDB.empty) {
+  if (productsDB.empty) {
     return {
       data: [],
       total: 0,
     };
   }
-  const categories = [];
+  const products = [];
   let total = 0;
 
-  categoriesDB.forEach((doc) => {
+  productsDB.forEach((doc) => {
     if (total < pageSize) {
-      categories.push({
+      products.push({
         ...doc.data(),
         id: doc.id,
       });
     }
     total++;
   });
+
+  const products2 = [];
+  for await (product of products) {
+    const imgs = [];
+    const imgsDb = await db
+      .collection("products")
+      .doc(product.id)
+      .collection("images")
+      .get();
+
+    imgsDb.forEach((img) => {
+      imgs.push({ ...img.data, id: img.id });
+    });
+    products2.push({ ...product, imgs });
+  }
+
   return {
-    data: categories,
-    total: categories.length,
+    data: products2,
+    total: products2.length,
     hasNext: total > pageSize,
-    startAfter:
-      total > pageSize ? categories[categories.length - 1].category : "",
+    startAfter: total > pageSize ? products[products.length - 1].category : "",
   };
 };
 
